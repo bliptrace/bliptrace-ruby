@@ -2,6 +2,7 @@
 
 require "g8scope/version"
 require "g8scope/config"
+require "g8scope/retry_policy"
 require "g8scope/scrubber"
 require "g8scope/envelope"
 require "g8scope/transport"

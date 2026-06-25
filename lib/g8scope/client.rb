@@ -15,7 +15,7 @@ module G8Scope
     # @param scrubber [G8Scope::Scrubber] defaults to one built from scrub_keys
     def initialize(config, transport = nil, scrubber = nil)
       @config = config.is_a?(Config) ? config : Config.from_hash(config)
-      @transport = transport || Transport::NetHttp.new
+      @transport = transport || Transport::NetHttp.new(RetryPolicy.from_config(@config))
       @scrubber = scrubber || Scrubber.new(@config.scrub_keys)
     end
 
