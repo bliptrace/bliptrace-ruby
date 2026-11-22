@@ -2,8 +2,8 @@ $LOAD_PATH.unshift File.expand_path('../lib', __dir__)
 require 'g8scope'
 
 G8scope.init(
-  key: ENV['G8SCOPE_KEY'],
-  endpoint: ENV.fetch('G8SCOPE_ENDPOINT', 'http://localhost:8088'),
+  key: ENV['BLIPTRACE_KEY'],
+  endpoint: ENV.fetch('BLIPTRACE_ENDPOINT', 'http://localhost:8088'),
   environment: 'demo',
   release: 'demo-ruby@1.0'
 )

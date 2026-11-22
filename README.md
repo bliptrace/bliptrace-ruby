@@ -32,7 +32,7 @@ require "g8scope"
 
 client = G8Scope::Client.new(
   G8Scope::Config.new(
-    key: ENV["G8SCOPE_INGEST_KEY"],   # your project ingest key
+    key: ENV["BLIPTRACE_INGEST_KEY"],   # your project ingest key
     environment: "production",
     release: "my-app@2026.06.25",
     base_path: Dir.pwd,               # used to flag in-app stack frames
@@ -51,7 +51,7 @@ end
 You can also pass a plain Hash instead of a `Config`:
 
 ```ruby
-client = G8Scope::Client.new(key: ENV["G8SCOPE_INGEST_KEY"], environment: "staging")
+client = G8Scope::Client.new(key: ENV["BLIPTRACE_INGEST_KEY"], environment: "staging")
 ```
 
 ### Deferring the send
