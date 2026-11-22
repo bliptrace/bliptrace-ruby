@@ -1,4 +1,4 @@
-# g8scope-ruby
+# bliptrace-ruby
 
 The runtime **Ruby SDK** for [g8scope](https://scope.g8suite.com) — a central,
 multi-tenant, runtime-agnostic error-capture and observability platform.

@@ -14,7 +14,7 @@ Gem::Specification.new do |spec|
   spec.description   = "Builds the language-neutral g8scope error envelope from a Ruby " \
                        "Exception, scrubs PII, and ships it to the g8scope ingest API " \
                        "using only the standard library. Never raises into the host app."
-  spec.homepage      = "https://github.com/developers-hub-my/g8scope-ruby"
+  spec.homepage      = "https://github.com/bliptrace/bliptrace-ruby"
   spec.license       = "MIT"
 
   spec.required_ruby_version = ">= 2.6"
