@@ -5,7 +5,7 @@ module Bliptrace
   # own config. Accepts either keyword arguments or a Hash (string or symbol
   # keys) via .new / .from_hash.
   class Config
-    DEFAULT_ENDPOINT = "https://ingest.scope.g8suite.com"
+    DEFAULT_ENDPOINT = "https://ingest.bliptrace.com"
 
     attr_reader :key, :endpoint, :environment, :release, :timeout,
                 :max_frames, :max_message, :ignore_exceptions, :scrub_keys,

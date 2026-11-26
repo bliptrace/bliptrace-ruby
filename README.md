@@ -80,7 +80,7 @@ client = Bliptrace::Client.new(config, MyTransport.new)
 | Option              | Default                              | Description                                                   |
 | ------------------- | ------------------------------------ | ------------------------------------------------------------- |
 | `key`               | `nil`                                | Project ingest key. No key means nothing is sent.             |
-| `endpoint`          | `https://ingest.scope.g8suite.com`   | Ingest base URL; the SDK POSTs to `{endpoint}/v1/ingest`.     |
+| `endpoint`          | `https://ingest.bliptrace.com`   | Ingest base URL; the SDK POSTs to `{endpoint}/v1/ingest`.     |
 | `environment`       | `"production"`                        | Deployment environment.                                       |
 | `release`           | `nil`                                 | Release marker, e.g. `my-app@2026.06.25`.                     |
 | `timeout`           | `3`                                   | HTTP timeout in seconds.                                      |
