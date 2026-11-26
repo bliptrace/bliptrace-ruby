@@ -1,7 +1,7 @@
 $LOAD_PATH.unshift File.expand_path('../lib', __dir__)
-require 'g8scope'
+require 'bliptrace'
 
-G8scope.init(
+Bliptrace.init(
   key: ENV['BLIPTRACE_KEY'],
   endpoint: ENV.fetch('BLIPTRACE_ENDPOINT', 'http://localhost:8088'),
   environment: 'demo',
@@ -11,7 +11,7 @@ G8scope.init(
 def fire(level: 'error')
   yield
 rescue StandardError, ScriptError => e
-  G8scope.capture(e, level: level, context: { demo: true })
+  Bliptrace.capture(e, level: level, context: { demo: true })
   puts "captured: #{e.class}"
 end
 

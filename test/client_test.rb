@@ -13,8 +13,8 @@ class ClientTest < Minitest::Test
 
   def test_builds_and_ships_a_valid_envelope
     t = FakeTransport.new
-    client = G8Scope::Client.new(
-      G8Scope::Config.new(key: "k", endpoint: "http://api", base_path: "/srv/app"),
+    client = Bliptrace::Client.new(
+      Bliptrace::Config.new(key: "k", endpoint: "http://api", base_path: "/srv/app"),
       t
     )
     client.capture(raised(RuntimeError, "boom"))
@@ -26,7 +26,7 @@ class ClientTest < Minitest::Test
     assert_match UUID_RE, env["event_id"]
     assert_equal "ruby", env["runtime"]["name"]
     assert_equal RUBY_VERSION, env["runtime"]["version"]
-    assert_equal "g8scope-ruby", env["sdk"]["name"]
+    assert_equal "bliptrace-ruby", env["sdk"]["name"]
     assert_equal "1.0.0", env["sdk"]["version"]
     assert_equal "error", env["level"]
     assert_equal "RuntimeError", env["exception"]["type"]
@@ -44,14 +44,14 @@ class ClientTest < Minitest::Test
 
   def test_occurred_at_is_rfc3339_with_milliseconds
     t = FakeTransport.new
-    G8Scope::Client.new(G8Scope::Config.new(key: "k"), t).capture(raised)
+    Bliptrace::Client.new(Bliptrace::Config.new(key: "k"), t).capture(raised)
     assert_match(/\A\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d{3}Z\z/, t.sent.first[:envelope]["occurred_at"])
   end
 
   def test_ignores_configured_exception_types
     t = FakeTransport.new
-    client = G8Scope::Client.new(
-      G8Scope::Config.new(key: "k", ignore_exceptions: ["ArgumentError"]),
+    client = Bliptrace::Client.new(
+      Bliptrace::Config.new(key: "k", ignore_exceptions: ["ArgumentError"]),
       t
     )
     client.capture(raised(ArgumentError, "noise"))
@@ -60,20 +60,20 @@ class ClientTest < Minitest::Test
 
   def test_does_nothing_without_a_key
     t = FakeTransport.new
-    G8Scope::Client.new(G8Scope::Config.new(key: nil), t).capture(raised)
+    Bliptrace::Client.new(Bliptrace::Config.new(key: nil), t).capture(raised)
     assert_empty t.sent
   end
 
   def test_does_nothing_when_disabled
     t = FakeTransport.new
-    G8Scope::Client.new(G8Scope::Config.new(key: "k", enabled: false), t).capture(raised)
+    Bliptrace::Client.new(Bliptrace::Config.new(key: "k", enabled: false), t).capture(raised)
     assert_empty t.sent
   end
 
   def test_scrubs_sensitive_context_before_sending
     t = FakeTransport.new
-    client = G8Scope::Client.new(
-      G8Scope::Config.new(key: "k", scrub_keys: ["password"]),
+    client = Bliptrace::Client.new(
+      Bliptrace::Config.new(key: "k", scrub_keys: ["password"]),
       t
     )
     client.capture(raised, "user" => { "password" => "hunter2", "id" => "7" })
@@ -85,8 +85,8 @@ class ClientTest < Minitest::Test
 
   def test_scrub_is_case_insensitive_and_nested_in_arrays
     t = FakeTransport.new
-    client = G8Scope::Client.new(
-      G8Scope::Config.new(key: "k", scrub_keys: ["Token"]),
+    client = Bliptrace::Client.new(
+      Bliptrace::Config.new(key: "k", scrub_keys: ["Token"]),
       t
     )
     client.capture(raised, "list" => [{ "token" => "abc" }], "TOKEN" => "x")
@@ -98,21 +98,21 @@ class ClientTest < Minitest::Test
 
   def test_never_raises_on_weird_context
     t = FakeTransport.new
-    client = G8Scope::Client.new(G8Scope::Config.new(key: "k"), t)
+    client = Bliptrace::Client.new(Bliptrace::Config.new(key: "k"), t)
     weird = { "a" => proc { 1 }, "b" => Object.new }
     assert_nil client.capture(raised, weird)
   end
 
   def test_accepts_hash_config
     t = FakeTransport.new
-    client = G8Scope::Client.new({ "key" => "k", "environment" => "staging" }, t)
+    client = Bliptrace::Client.new({ "key" => "k", "environment" => "staging" }, t)
     client.capture(raised)
     assert_equal "staging", t.sent.first[:envelope]["environment"]
   end
 
   def test_build_and_send_can_be_split
     t = FakeTransport.new
-    client = G8Scope::Client.new(G8Scope::Config.new(key: "k"), t)
+    client = Bliptrace::Client.new(Bliptrace::Config.new(key: "k"), t)
     env = client.build_envelope(raised)
     refute_nil env
     assert_empty t.sent
@@ -122,7 +122,7 @@ class ClientTest < Minitest::Test
 
   def test_marks_fatal_for_fatal_class
     t = FakeTransport.new
-    client = G8Scope::Client.new(G8Scope::Config.new(key: "k"), t)
+    client = Bliptrace::Client.new(Bliptrace::Config.new(key: "k"), t)
     err =
       begin
         raise NoMemoryError, "oom"
@@ -135,7 +135,7 @@ class ClientTest < Minitest::Test
 
   def test_never_puts_project_in_payload
     t = FakeTransport.new
-    G8Scope::Client.new(G8Scope::Config.new(key: "k"), t).capture(raised)
+    Bliptrace::Client.new(Bliptrace::Config.new(key: "k"), t).capture(raised)
     refute t.sent.first[:envelope].key?("project")
   end
 end

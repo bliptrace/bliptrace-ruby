@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-module G8Scope
+module Bliptrace
   # Decides whether a failed ingest attempt should be retried, and how long to
   # wait. Mirrors the PHP SDK's RetryPolicy.
   #

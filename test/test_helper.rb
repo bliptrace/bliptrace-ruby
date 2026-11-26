@@ -13,7 +13,7 @@ rescue LoadError
   require "minitest/autorun"
 end
 
-require "g8scope"
+require "bliptrace"
 
 # A fake transport that records every envelope it is asked to ship instead of
 # making any network call. Used across the test suite.

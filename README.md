@@ -1,10 +1,10 @@
 # bliptrace-ruby
 
-The runtime **Ruby SDK** for [g8scope](https://scope.g8suite.com) — a central,
+The runtime **Ruby SDK** for [Bliptrace](https://bliptrace.com) — a central,
 multi-tenant, runtime-agnostic error-capture and observability platform.
 
 This SDK builds the language-neutral **error envelope** from a Ruby `Exception`,
-scrubs PII, and ships it to the g8scope ingest API over HTTPS using only the
+scrubs PII, and ships it to the Bliptrace ingest API over HTTPS using only the
 standard library (`Net::HTTP`). It never raises into your application.
 
 ## Installation
@@ -12,13 +12,13 @@ standard library (`Net::HTTP`). It never raises into your application.
 Install directly:
 
 ```sh
-gem install g8scope
+gem install bliptrace
 ```
 
 Or add it to your `Gemfile`:
 
 ```ruby
-gem "g8scope"
+gem "bliptrace"
 ```
 
 then run `bundle install`.
@@ -28,10 +28,10 @@ The SDK has **no runtime dependencies** and supports **Ruby 2.6+**.
 ## Usage
 
 ```ruby
-require "g8scope"
+require "bliptrace"
 
-client = G8Scope::Client.new(
-  G8Scope::Config.new(
+client = Bliptrace::Client.new(
+  Bliptrace::Config.new(
     key: ENV["BLIPTRACE_INGEST_KEY"],   # your project ingest key
     environment: "production",
     release: "my-app@2026.06.25",
@@ -51,7 +51,7 @@ end
 You can also pass a plain Hash instead of a `Config`:
 
 ```ruby
-client = G8Scope::Client.new(key: ENV["BLIPTRACE_INGEST_KEY"], environment: "staging")
+client = Bliptrace::Client.new(key: ENV["BLIPTRACE_INGEST_KEY"], environment: "staging")
 ```
 
 ### Deferring the send
@@ -72,7 +72,7 @@ Any object that responds to `send_envelope(endpoint, key, envelope, timeout)`
 buffering, testing, or routing through your own queue:
 
 ```ruby
-client = G8Scope::Client.new(config, MyTransport.new)
+client = Bliptrace::Client.new(config, MyTransport.new)
 ```
 
 ## Configuration
@@ -90,8 +90,8 @@ client = G8Scope::Client.new(config, MyTransport.new)
 | `scrub_keys`        | `[]`                                  | Context keys to redact (case-insensitive, recursive).        |
 | `base_path`         | `""`                                  | App root; frames under it (and not under `/gems/`) are in-app. |
 | `enabled`           | `true`                                | Master switch.                                                |
-| `sdk_name`          | `"g8scope-ruby"`                      | Reported SDK name.                                            |
-| `sdk_version`       | `G8Scope::VERSION`                    | Reported SDK version.                                         |
+| `sdk_name`          | `"bliptrace-ruby"`                      | Reported SDK name.                                            |
+| `sdk_version`       | `Bliptrace::VERSION`                    | Reported SDK version.                                         |
 
 ## A note on tenancy
 

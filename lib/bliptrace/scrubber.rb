@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-module G8Scope
+module Bliptrace
   # Client-side PII scrub: recursively redact configured keys (case-insensitive)
   # in a Hash before anything is sent.
   class Scrubber

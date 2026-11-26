@@ -3,8 +3,8 @@
 require "securerandom"
 require "time"
 
-module G8Scope
-  # Builds the language-neutral g8scope error envelope from a Ruby Exception.
+module Bliptrace
+  # Builds the language-neutral Bliptrace error envelope from a Ruby Exception.
   #
   # NOTE: `project` is intentionally never put in the payload — it is resolved
   # server-side from the ingest key.
@@ -12,7 +12,7 @@ module G8Scope
     module_function
 
     # @param exception [Exception]
-    # @param config [G8Scope::Config]
+    # @param config [Bliptrace::Config]
     # @param context [Hash] already-scrubbed context (request/user/custom)
     # @return [Hash]
     def build(exception, config, context = {})

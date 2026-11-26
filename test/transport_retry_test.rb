@@ -5,7 +5,7 @@ require "test_helper"
 # A NetHttp transport whose per-attempt HTTP call is scripted and whose sleep is
 # recorded instead of performed -- so the retry loop is exercised with NO real
 # network and NO real sleeping.
-class ScriptedTransport < G8Scope::Transport::NetHttp
+class ScriptedTransport < Bliptrace::Transport::NetHttp
   attr_reader :attempts, :sleeps, :bodies
 
   # @param results [Array<Array(Integer, Integer|nil)>] [status, retry_after]
@@ -35,7 +35,7 @@ end
 
 class TransportRetryTest < Minitest::Test
   def policy(**opts)
-    G8Scope::RetryPolicy.new({ max_retries: 2, base_ms: 100, cap_ms: 2000 }.merge(opts))
+    Bliptrace::RetryPolicy.new({ max_retries: 2, base_ms: 100, cap_ms: 2000 }.merge(opts))
   end
 
   def envelope
@@ -107,7 +107,7 @@ class TransportRetryTest < Minitest::Test
   end
 
   def test_never_raises_even_when_attempt_blows_up
-    raising = Class.new(G8Scope::Transport::NetHttp) do
+    raising = Class.new(Bliptrace::Transport::NetHttp) do
       def attempt_request(*)
         raise "boom inside attempt"
       end

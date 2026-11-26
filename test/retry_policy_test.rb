@@ -7,7 +7,7 @@ class RetryPolicyTest < Minitest::Test
   NO_JITTER = -> { 0.5 }
 
   def test_retryable_classification
-    policy = G8Scope::RetryPolicy.new(max_retries: 5)
+    policy = Bliptrace::RetryPolicy.new(max_retries: 5)
 
     {
       0   => true,  # transport error / timeout
@@ -29,7 +29,7 @@ class RetryPolicyTest < Minitest::Test
   end
 
   def test_stops_once_attempt_cap_reached
-    policy = G8Scope::RetryPolicy.new(max_retries: 2)
+    policy = Bliptrace::RetryPolicy.new(max_retries: 2)
 
     assert policy.should_retry?(503, 0)
     assert policy.should_retry?(503, 1)
@@ -37,7 +37,7 @@ class RetryPolicyTest < Minitest::Test
   end
 
   def test_does_not_retry_non_retryable_even_with_attempts_left
-    policy = G8Scope::RetryPolicy.new(max_retries: 5)
+    policy = Bliptrace::RetryPolicy.new(max_retries: 5)
 
     refute policy.should_retry?(200, 0)
     refute policy.should_retry?(400, 0)
@@ -45,7 +45,7 @@ class RetryPolicyTest < Minitest::Test
   end
 
   def test_backoff_grows_exponentially_and_caps
-    policy = G8Scope::RetryPolicy.new(base_ms: 100, cap_ms: 2000)
+    policy = Bliptrace::RetryPolicy.new(base_ms: 100, cap_ms: 2000)
 
     assert_equal 100, policy.delay_ms(0, jitter: NO_JITTER)
     assert_equal 200, policy.delay_ms(1, jitter: NO_JITTER)
@@ -56,7 +56,7 @@ class RetryPolicyTest < Minitest::Test
 
   def test_jitter_stays_within_plus_minus_25_percent
     # Large cap so jitter is never clamped by the cap during this test.
-    policy = G8Scope::RetryPolicy.new(base_ms: 100, cap_ms: 100_000)
+    policy = Bliptrace::RetryPolicy.new(base_ms: 100, cap_ms: 100_000)
 
     [-> { 0.0 }, -> { 0.999 }, -> { 0.5 }, -> { 0.25 }, -> { 0.75 }].each do |jitter|
       d = policy.delay_ms(3, jitter: jitter) # base exp == 800ms
@@ -66,7 +66,7 @@ class RetryPolicyTest < Minitest::Test
   end
 
   def test_delay_clamped_to_zero_and_cap
-    policy = G8Scope::RetryPolicy.new(base_ms: 100, cap_ms: 2000)
+    policy = Bliptrace::RetryPolicy.new(base_ms: 100, cap_ms: 2000)
 
     # Minimum jitter pushes toward 0 but never below it.
     assert_equal 75, policy.delay_ms(0, jitter: -> { 0.0 }) # 100 - 25
@@ -77,22 +77,22 @@ class RetryPolicyTest < Minitest::Test
   end
 
   def test_retry_after_seconds_honoured_and_capped
-    policy = G8Scope::RetryPolicy.new(cap_ms: 5000)
+    policy = Bliptrace::RetryPolicy.new(cap_ms: 5000)
 
     assert_equal 2000, policy.delay_ms(0, retry_after_seconds: 2)   # 2s honoured
     assert_equal 5000, policy.delay_ms(0, retry_after_seconds: 999) # hostile value capped
   end
 
   def test_retry_after_zero_or_nil_falls_back_to_backoff
-    policy = G8Scope::RetryPolicy.new(base_ms: 100, cap_ms: 2000)
+    policy = Bliptrace::RetryPolicy.new(base_ms: 100, cap_ms: 2000)
 
     assert_equal 100, policy.delay_ms(0, retry_after_seconds: 0, jitter: NO_JITTER)
     assert_equal 100, policy.delay_ms(0, retry_after_seconds: nil, jitter: NO_JITTER)
   end
 
   def test_from_config_threads_knobs
-    config = G8Scope::Config.new(key: "k", max_retries: 7, retry_base_ms: 50, retry_cap_ms: 9000)
-    policy = G8Scope::RetryPolicy.from_config(config)
+    config = Bliptrace::Config.new(key: "k", max_retries: 7, retry_base_ms: 50, retry_cap_ms: 9000)
+    policy = Bliptrace::RetryPolicy.from_config(config)
 
     assert_equal 7, policy.max_retries
     assert_equal 50, policy.base_ms
@@ -100,7 +100,7 @@ class RetryPolicyTest < Minitest::Test
   end
 
   def test_config_defaults
-    config = G8Scope::Config.new(key: "k")
+    config = Bliptrace::Config.new(key: "k")
 
     assert_equal 2, config.max_retries
     assert_equal 100, config.retry_base_ms

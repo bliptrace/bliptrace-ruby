@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-module G8Scope
+module Bliptrace
   # Immutable-ish SDK configuration. Framework adapters build this from their
   # own config. Accepts either keyword arguments or a Hash (string or symbol
   # keys) via .new / .from_hash.
@@ -24,8 +24,8 @@ module G8Scope
       scrub_keys: [],
       base_path: "",
       enabled: true,
-      sdk_name: "g8scope-ruby",
-      sdk_version: G8Scope::VERSION,
+      sdk_name: "bliptrace-ruby",
+      sdk_version: Bliptrace::VERSION,
       max_retries: 2,
       retry_base_ms: 100,
       retry_cap_ms: 2000
@@ -41,8 +41,8 @@ module G8Scope
       @scrub_keys = Array(scrub_keys).map(&:to_s)
       @base_path = base_path.to_s
       @enabled = enabled.nil? ? true : enabled
-      @sdk_name = sdk_name || "g8scope-ruby"
-      @sdk_version = sdk_version || G8Scope::VERSION
+      @sdk_name = sdk_name || "bliptrace-ruby"
+      @sdk_version = sdk_version || Bliptrace::VERSION
       @max_retries = (max_retries.nil? ? 2 : max_retries).to_i
       @retry_base_ms = (retry_base_ms.nil? ? 100 : retry_base_ms).to_i
       @retry_cap_ms = (retry_cap_ms.nil? ? 2000 : retry_cap_ms).to_i

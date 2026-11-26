@@ -4,7 +4,7 @@ require "json"
 require "net/http"
 require "uri"
 
-module G8Scope
+module Bliptrace
   # Transport is a duck-typed interface: any object that responds to
   # #send_envelope(endpoint, key, envelope, timeout) (or #call with the same
   # arguments) can be used as a transport. Implementations MUST NEVER raise.
@@ -18,7 +18,7 @@ module G8Scope
     class NetHttp
       INGEST_PATH = "/v1/ingest"
 
-      # @param policy [G8Scope::RetryPolicy] retry strategy (pure, injectable)
+      # @param policy [Bliptrace::RetryPolicy] retry strategy (pure, injectable)
       def initialize(policy = nil)
         @policy = policy || RetryPolicy.new
       end

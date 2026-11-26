@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-module G8Scope
+module Bliptrace
   # The runtime Ruby client: decide whether to capture, build + scrub the
   # envelope, and ship it. Framework adapters either call #capture directly or
   # split #build_envelope / #send_envelope to defer the send (e.g. after the
@@ -10,9 +10,9 @@ module G8Scope
   class Client
     attr_reader :config
 
-    # @param config [G8Scope::Config, Hash] config object or options hash
+    # @param config [Bliptrace::Config, Hash] config object or options hash
     # @param transport [#send_envelope, #call] defaults to Transport::NetHttp
-    # @param scrubber [G8Scope::Scrubber] defaults to one built from scrub_keys
+    # @param scrubber [Bliptrace::Scrubber] defaults to one built from scrub_keys
     def initialize(config, transport = nil, scrubber = nil)
       @config = config.is_a?(Config) ? config : Config.from_hash(config)
       @transport = transport || Transport::NetHttp.new(RetryPolicy.from_config(@config))
